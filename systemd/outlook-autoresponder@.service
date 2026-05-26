@@ -1,0 +1,15 @@
+[Unit]
+Description=Outlook KB Autoresponder (%i)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/outlook-kb-autoresponder
+ExecStart=/opt/outlook-kb-autoresponder/.venv/bin/python /opt/outlook-kb-autoresponder/scripts/run_once.py --instance %i --loop
+Restart=always
+RestartSec=10
+User=pi
+
+[Install]
+WantedBy=multi-user.target
