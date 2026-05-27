@@ -156,3 +156,26 @@ python -m scripts.run_once --instance support --dry-run
 ```
 
 The bootstrap script also installs the project in editable mode.
+
+
+## PGVector knowledge base
+If your KB already lives in Postgres with PGVector, set:
+```bash
+KB_BACKEND=pgvector
+KB_DATABASE_URL=postgresql://...
+KB_TABLE=kb_chunks
+KB_QUERY_EMBED_MODEL=your-embedding-model
+```
+
+Optional column overrides:
+- `KB_DOCUMENT_ID_COLUMN`
+- `KB_TEXT_COLUMN`
+- `KB_EMBEDDING_COLUMN`
+- `KB_METADATA_COLUMN`
+- `KB_SOURCE_COLUMN`
+- `KB_TOP_K`
+
+Markdown retrieval remains available as a fallback with:
+```bash
+KB_BACKEND=markdown
+```

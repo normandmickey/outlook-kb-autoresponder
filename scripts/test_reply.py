@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
 
 from outlook_autoresponder import config
 from outlook_autoresponder.models import EmailMessage
-from outlook_autoresponder.kb import load_kb_documents, simple_search
+from outlook_autoresponder.kb import search_kb
 from outlook_autoresponder.policy import classify_message
 from outlook_autoresponder.responder import generate_reply, llm_connection_help_text
 
@@ -54,9 +54,8 @@ def main():
     if not message.subject and not message.body_text:
         raise RuntimeError('Provide --input or at least --subject/--body for a local test')
 
-    docs = load_kb_documents(instance['kb_path'])
     query = f"{message.subject} {message.body_text}"
-    hits = simple_search(query, docs, limit=args.kb_limit)
+    hits = search_kb(query, instance['kb_path'], limit=args.kb_limit)
     decision = classify_message(message, hits)
     try:
         reply = generate_reply(message, hits, decision)

@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 
 from .graph_client import get_access_token, graph_get, graph_post, graph_patch
-from .kb import load_kb_documents, simple_search
+from .kb import search_kb
 from .responder import generate_reply
 from .policy import classify_message
 from .storage import is_processed, mark_processed
@@ -85,7 +85,6 @@ def process_instance(limit: int = 3, instance_name: str | None = None, dry_run: 
         raise RuntimeError(f"MICROSOFT_USER_EMAIL is not configured for instance {instance['instance_name']}")
 
     token = get_access_token()
-    docs = load_kb_documents(kb_path)
     messages = fetch_recent_messages(token, mailbox_email)
     processed = 0
     log_dir = config.BASE_DIR / 'logs'
@@ -95,6 +94,7 @@ def process_instance(limit: int = 3, instance_name: str | None = None, dry_run: 
         f"MAILBOX={mailbox_email}",
         f"KB_PATH={kb_path}",
         f"DATA_PATH={data_path}",
+        f"KB_BACKEND={config.KB_BACKEND}",
         f"DRY_RUN={str(dry_run).lower()}",
         '---',
     ]
@@ -109,7 +109,7 @@ def process_instance(limit: int = 3, instance_name: str | None = None, dry_run: 
         body_text = fetch_message_body(token, mailbox_email, message_id)
         message = normalize_message(row, body_text)
         query = f"{message.subject} {message.body_preview} {message.body_text}"
-        hits = simple_search(query, docs)
+        hits = search_kb(query, kb_path)
         decision = classify_message(message, hits)
         reply = generate_reply(message, hits, decision)
         draft_id = create_draft_reply(token, mailbox_email, message.id, reply, dry_run=dry_run)

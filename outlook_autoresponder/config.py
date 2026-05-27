@@ -21,6 +21,16 @@ LLM_CA_BUNDLE = os.getenv('LLM_CA_BUNDLE', '').strip()
 LLM_VERIFY_SSL = os.getenv('LLM_VERIFY_SSL', 'true').strip().lower() not in {'0', 'false', 'no'}
 MODE = os.getenv('OUTLOOK_AUTORESPONDER_MODE', 'draft').strip().lower()
 POLL_SECONDS = int(os.getenv('OUTLOOK_AUTORESPONDER_POLL_SECONDS', '120'))
+KB_BACKEND = os.getenv('KB_BACKEND', 'markdown').strip().lower()
+KB_DATABASE_URL = os.getenv('KB_DATABASE_URL', '').strip()
+KB_TABLE = os.getenv('KB_TABLE', 'kb_chunks').strip()
+KB_DOCUMENT_ID_COLUMN = os.getenv('KB_DOCUMENT_ID_COLUMN', 'document_id').strip()
+KB_TEXT_COLUMN = os.getenv('KB_TEXT_COLUMN', 'chunk_text').strip()
+KB_EMBEDDING_COLUMN = os.getenv('KB_EMBEDDING_COLUMN', 'embedding').strip()
+KB_METADATA_COLUMN = os.getenv('KB_METADATA_COLUMN', 'metadata').strip()
+KB_SOURCE_COLUMN = os.getenv('KB_SOURCE_COLUMN', 'source').strip()
+KB_TOP_K = int(os.getenv('KB_TOP_K', '5'))
+KB_QUERY_EMBED_MODEL = os.getenv('KB_QUERY_EMBED_MODEL', '').strip()
 
 
 def load_instance(instance_name: str | None = None):
